@@ -33,7 +33,14 @@ class Matrix(object):
     def setitem(self, row, col, v):
         self.matrix[row][col] = v
 
+    def __setitem__(self, row, col, v):
+        self.matrix[row][col] = v
+
     def getitem(self, row, col):
+        return self.matrix[row][col]
+
+    def __getitem__(self, coord):
+        row, col = coord
         return self.matrix[row][col]
 
     def set_all_columns_for_row(self, row, to=None):
@@ -89,7 +96,7 @@ class StringMap(object):
                 self.coords.setitem(i, axis, self.calculate_coord(x, y, dist))
 
     def calculate_coord(self, x, y, dist):
-        return (pow(x, 2) + pow(dist, 2) - pow(y, 2)) / (2 * dist))
+        return ( pow(x, 2) + pow(dist, 2) - pow(y, 2)) / (2 * dist) 
 
     def choose_pivot_strings(self, axis, m=5):
         """Chooses two pivot strings on the h-th dimension
@@ -124,13 +131,11 @@ class StringMap(object):
                     pivot_dist[c] = dist
                     # update the furthest away from each other matrix
                     pivots[0 if c else 1] = randidx
-
-        return *pivots
+        return pivots
 
     def get_distance(self, coord_a, coord_b, axis):
         """Get distance of two strings (indexed by coord_a and coord_b)
         after they are projected on the first h - 1 axes.
-
         It iterates over the h - 1 dimensions.
         """
         string_a = self.string_list[coord_a]
@@ -139,5 +144,4 @@ class StringMap(object):
         for i in xrange(axis):
             w = abs(self.coords[coord_a, i] - self.coords[coord_b, i])
             metric_distance = sqrt(abs(pow(metric_distance, 2) - pow(w, 2)))
-
         return metric_distance
